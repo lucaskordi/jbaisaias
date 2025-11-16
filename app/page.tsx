@@ -13,6 +13,7 @@ export default function HomePage() {
   const [zoom, setZoom] = useState(DEFAULT_ZOOM)
   const [isMobile, setIsMobile] = useState(false)
   const [showMobileWarning, setShowMobileWarning] = useState(true)
+  const [interactionMode, setInteractionMode] = useState(false)
   const scrollRef = useRef<HTMLElement | null>(null)
   const { scrollYProgress } = useScroll({
     container: scrollRef,
@@ -25,12 +26,23 @@ export default function HomePage() {
       setIsMobile(mobile)
       if (!mobile) {
         setShowMobileWarning(false)
+        setInteractionMode(false)
       }
     }
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  useEffect(() => {
+    if (isMobile && scrollRef.current) {
+      if (interactionMode) {
+        scrollRef.current.style.overflow = 'hidden'
+      } else {
+        scrollRef.current.style.overflow = 'auto'
+      }
+    }
+  }, [interactionMode, isMobile])
   const introOpacity = useTransform(scrollYProgress, [0, 0.2, 0.35], [1, 1, 0])
   const circleScale = useTransform(scrollYProgress, [0.05, 0.35, 0.6, 0.85], [0.1, 10, 4, 0.05])
   const messageOpacity = useTransform(scrollYProgress, [0.12, 0.28], [0, 1])
@@ -61,10 +73,16 @@ export default function HomePage() {
   return (
     <main ref={scrollRef} className="relative h-screen overflow-y-auto bg-white text-slate-900">
       {showMobileWarning && isMobile && <MobileWarning onDismiss={() => setShowMobileWarning(false)} />}
+      {isMobile && (
+        <div className="fixed top-0 right-0 z-[50] flex items-center gap-2 px-6 pt-8">
+          <InteractionToggle interactionMode={interactionMode} onToggle={() => setInteractionMode(!interactionMode)} />
+          <ZoomBarMobile onZoomIn={increase} onZoomOut={decrease} zoomColor={zoomIconColor} />
+        </div>
+      )}
       <div className="pointer-events-none absolute inset-0 bg-gradient opacity-40" />
       <ScrollWave />
       <ZoomBar onZoomIn={increase} onZoomOut={decrease} zoomColor={zoomIconColor} />
-      <CarShowcase zoom={adjustedZoom} introOpacity={introOpacity} circleScale={circleScale} messageOpacity={messageOpacity} messageX={messageX} carinhoCombinedOpacity={carinhoCombinedOpacity} curitibaOpacity={curitibaOpacity} curitibaX={curitibaX} cityOpacity={cityOpacity} rotationProgress={carRotationProgress} />
+      <CarShowcase zoom={adjustedZoom} introOpacity={introOpacity} circleScale={circleScale} messageOpacity={messageOpacity} messageX={messageX} carinhoCombinedOpacity={carinhoCombinedOpacity} curitibaOpacity={curitibaOpacity} curitibaX={curitibaX} cityOpacity={cityOpacity} rotationProgress={carRotationProgress} interactionMode={interactionMode} />
       <div className="h-[200vh]" />
       <FooterMarquee />
     </main>
@@ -105,7 +123,7 @@ function ZoomBar({ onZoomIn, onZoomOut, zoomColor }: { onZoomIn: () => void; onZ
   }, [onZoomOut])
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 z-30 flex justify-center px-6 pt-8">
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-30 hidden justify-center px-6 pt-8 md:flex">
       <motion.div className="pointer-events-auto flex items-center gap-4 rounded-full border border-white/20 bg-white/10 px-6 py-3 shadow-lg backdrop-blur" style={{ color: zoomColor }}>
         <button
           type="button"
@@ -128,7 +146,38 @@ function ZoomBar({ onZoomIn, onZoomOut, zoomColor }: { onZoomIn: () => void; onZ
   )
 }
 
-function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX, carinhoCombinedOpacity, curitibaOpacity, curitibaX, cityOpacity, rotationProgress }: { zoom: number; introOpacity: MotionValue<number>; circleScale: MotionValue<number>; messageOpacity: MotionValue<number>; messageX: MotionValue<number>; carinhoCombinedOpacity: MotionValue<number>; curitibaOpacity: MotionValue<number>; curitibaX: MotionValue<number>; cityOpacity: MotionValue<number>; rotationProgress: MotionValue<number> }) {
+function ZoomBarMobile({ onZoomIn, onZoomOut, zoomColor }: { onZoomIn: () => void; onZoomOut: () => void; zoomColor: MotionValue<string> }) {
+  const handleZoomIn = useCallback(() => {
+    onZoomIn()
+  }, [onZoomIn])
+
+  const handleZoomOut = useCallback(() => {
+    onZoomOut()
+  }, [onZoomOut])
+
+  return (
+    <motion.div className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 shadow-lg backdrop-blur" style={{ color: zoomColor }}>
+      <button
+        type="button"
+        onClick={handleZoomOut}
+        aria-label="Diminuir zoom"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-lg font-semibold transition hover:bg-white/20"
+      >
+        -
+      </button>
+      <button
+        type="button"
+        onClick={handleZoomIn}
+        aria-label="Aumentar zoom"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-lg font-semibold transition hover:bg-white/20"
+      >
+        +
+      </button>
+    </motion.div>
+  )
+}
+
+function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX, carinhoCombinedOpacity, curitibaOpacity, curitibaX, cityOpacity, rotationProgress, interactionMode }: { zoom: number; introOpacity: MotionValue<number>; circleScale: MotionValue<number>; messageOpacity: MotionValue<number>; messageX: MotionValue<number>; carinhoCombinedOpacity: MotionValue<number>; curitibaOpacity: MotionValue<number>; curitibaX: MotionValue<number>; cityOpacity: MotionValue<number>; rotationProgress: MotionValue<number>; interactionMode: boolean }) {
   const prompts = [
     {
       animation: mouseInteractAnimation,
@@ -178,7 +227,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
           </span>
         </div>
       </motion.div>
-      <motion.div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-end pb-20 px-6 md:hidden" style={{ opacity: introOpacity }}>
+      <motion.div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-end px-6 md:hidden" style={{ opacity: introOpacity, paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
         <div className="flex flex-col items-start gap-3 text-left text-xs font-semibold uppercase tracking-[0.32em] text-white/80 w-full max-w-sm">
           {prompts.map((prompt) => (
             <div key={prompt.lines.join('-')} className="flex items-start gap-3 w-full">
@@ -275,7 +324,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
       </div>
       <div className="pointer-events-auto relative z-[6] flex h-full w-full items-center justify-center md:items-center md:justify-center">
         <div className="flex h-full w-full items-end justify-center pb-8 md:items-center md:pb-0">
-          <CarViewer zoom={zoom} rotationValue={rotationProgress} />
+          <CarViewer zoom={zoom} rotationValue={rotationProgress} enableControls={interactionMode} />
         </div>
       </div>
     </div>
@@ -290,6 +339,22 @@ const ZOOM_MIN = 0.7
 const ZOOM_MAX = 1.4
 const ZOOM_STEP = 0.08
 const DEFAULT_ZOOM = 1
+
+function InteractionToggle({ interactionMode, onToggle }: { interactionMode: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className={`rounded-full border-2 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.1em] transition ${
+        interactionMode
+          ? 'border-[#00D848] bg-[#00D848] text-white'
+          : 'border-white/80 bg-white/20 text-white backdrop-blur'
+      }`}
+    >
+      {interactionMode ? 'Interação' : 'Scroll'}
+    </button>
+  )
+}
 
 function MobileWarning({ onDismiss }: { onDismiss: () => void }) {
   return (

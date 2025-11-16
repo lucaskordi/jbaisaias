@@ -17,10 +17,17 @@ const BASE_ROTATION = Math.PI * 0.25
 interface CarViewerProps {
   zoom: number
   rotationValue: MotionValue<number>
+  enableControls?: boolean
 }
 
-export function CarViewer({ zoom, rotationValue }: CarViewerProps) {
+export function CarViewer({ zoom, rotationValue, enableControls = true }: CarViewerProps) {
   const controlsRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.enabled = enableControls
+    }
+  }, [enableControls])
 
   return (
     <div className="relative h-full w-full">
@@ -30,7 +37,7 @@ export function CarViewer({ zoom, rotationValue }: CarViewerProps) {
         <Suspense fallback={null}>
           <AnimatedCar rotationValue={rotationValue} />
         </Suspense>
-        <OrbitControls ref={controlsRef} enablePan={false} enableZoom={false} maxPolarAngle={Math.PI * 0.52} minPolarAngle={Math.PI * 0.2} />
+        <OrbitControls ref={controlsRef} enablePan={false} enableZoom={false} enabled={enableControls} maxPolarAngle={Math.PI * 0.52} minPolarAngle={Math.PI * 0.2} />
         <Environment preset="city" />
         <ContactShadows position={[0, FLOOR_Y, 0]} opacity={0.7} scale={6} blur={1.8} far={5} />
       </Canvas>
