@@ -193,6 +193,16 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
       lines: ['Utilize o scroll do mouse', 'para navegar pelo conteúdo', 'do site']
     }
   ]
+  const mobilePrompts = [
+    {
+      animation: mouseInteractAnimation,
+      lines: ['Utilize o modo interação para girar o modelo 3D']
+    },
+    {
+      animation: mouseScrollAnimation,
+      lines: ['Clique no botão verde de interação e mude para o', 'modo scroll para navegar']
+    }
+  ]
 
   return (
     <div className="pointer-events-none sticky top-0 z-10 flex h-screen w-full flex-col md:items-center md:justify-center">
@@ -233,15 +243,15 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
         </div>
       </motion.div>
       <motion.div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-end px-6 md:hidden" style={{ opacity: introOpacity, paddingBottom: 'calc(9rem + env(safe-area-inset-bottom))' }}>
-        <div className="flex flex-col items-start gap-3 text-left text-xs font-semibold uppercase tracking-[0.32em] text-white/80 w-full max-w-sm">
-          {prompts.map((prompt) => (
-            <div key={prompt.lines.join('-')} className="flex items-start gap-3 w-full">
+        <div className="flex flex-col items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-white/80">
+          {mobilePrompts.map((prompt) => (
+            <div key={prompt.lines.join('-')} className="flex items-center justify-center gap-3">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center flex-shrink-0">
                 <Lottie animationData={prompt.animation} className="h-10 w-10" autoplay loop />
               </span>
-              <div className="flex flex-col items-start text-left text-[11px] leading-[1.4] tracking-[0.32em] text-white flex-1">
+              <div className="flex flex-col items-center justify-center text-[11px] leading-[1.4] tracking-[0.32em] text-white" style={{ textAlign: 'center' }}>
                 {prompt.lines.map((line) => (
-                  <span key={line}>{line}</span>
+                  <span key={line} style={{ textAlign: 'center', display: 'block' }}>{line}</span>
                 ))}
               </div>
             </div>
