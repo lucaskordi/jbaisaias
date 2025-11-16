@@ -36,11 +36,12 @@ export default function HomePage() {
 
   useEffect(() => {
     if (isMobile && scrollRef.current) {
+      scrollRef.current.style.overflowX = 'hidden'
       if (interactionMode) {
-        scrollRef.current.style.overflow = 'hidden'
+        scrollRef.current.style.overflowY = 'hidden'
         scrollRef.current.style.touchAction = 'none'
       } else {
-        scrollRef.current.style.overflow = 'auto'
+        scrollRef.current.style.overflowY = 'auto'
         scrollRef.current.style.touchAction = 'auto'
       }
     } else if (scrollRef.current) {
@@ -76,7 +77,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main ref={scrollRef} className="relative h-screen overflow-y-auto bg-white text-slate-900">
+    <main ref={scrollRef} className="relative h-screen overflow-y-auto overflow-x-hidden bg-white text-slate-900">
       {showMobileWarning && isMobile && <MobileWarning onDismiss={() => setShowMobileWarning(false)} />}
       {isMobile && (
         <div className="fixed top-0 right-0 z-[50] flex items-center gap-2 px-6 pt-8">
