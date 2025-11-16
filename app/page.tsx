@@ -88,7 +88,7 @@ export default function HomePage() {
       <div className="pointer-events-none absolute inset-0 bg-gradient opacity-40" />
       <ScrollWave />
       <ZoomBar onZoomIn={increase} onZoomOut={decrease} zoomColor={zoomIconColor} />
-      <CarShowcase zoom={adjustedZoom} introOpacity={introOpacity} circleScale={circleScale} messageOpacity={messageOpacity} messageX={messageX} carinhoCombinedOpacity={carinhoCombinedOpacity} curitibaOpacity={curitibaOpacity} curitibaX={curitibaX} cityOpacity={cityOpacity} rotationProgress={carRotationProgress} interactionMode={interactionMode} />
+      <CarShowcase zoom={adjustedZoom} introOpacity={introOpacity} circleScale={circleScale} messageOpacity={messageOpacity} messageX={messageX} carinhoCombinedOpacity={carinhoCombinedOpacity} curitibaOpacity={curitibaOpacity} curitibaX={curitibaX} cityOpacity={cityOpacity} rotationProgress={carRotationProgress} interactionMode={interactionMode} isMobile={isMobile} />
       <div className="h-[200vh]" />
       <FooterMarquee />
     </main>
@@ -183,7 +183,7 @@ function ZoomBarMobile({ onZoomIn, onZoomOut, zoomColor }: { onZoomIn: () => voi
   )
 }
 
-function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX, carinhoCombinedOpacity, curitibaOpacity, curitibaX, cityOpacity, rotationProgress, interactionMode }: { zoom: number; introOpacity: MotionValue<number>; circleScale: MotionValue<number>; messageOpacity: MotionValue<number>; messageX: MotionValue<number>; carinhoCombinedOpacity: MotionValue<number>; curitibaOpacity: MotionValue<number>; curitibaX: MotionValue<number>; cityOpacity: MotionValue<number>; rotationProgress: MotionValue<number>; interactionMode: boolean }) {
+function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX, carinhoCombinedOpacity, curitibaOpacity, curitibaX, cityOpacity, rotationProgress, interactionMode, isMobile }: { zoom: number; introOpacity: MotionValue<number>; circleScale: MotionValue<number>; messageOpacity: MotionValue<number>; messageX: MotionValue<number>; carinhoCombinedOpacity: MotionValue<number>; curitibaOpacity: MotionValue<number>; curitibaX: MotionValue<number>; cityOpacity: MotionValue<number>; rotationProgress: MotionValue<number>; interactionMode: boolean; isMobile: boolean }) {
   const prompts = [
     {
       animation: mouseInteractAnimation,
@@ -340,7 +340,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
       </div>
       <div className={`relative z-[6] flex h-full w-full items-center justify-center md:items-center md:justify-center ${interactionMode ? 'pointer-events-auto' : 'pointer-events-none md:pointer-events-auto'}`} style={{ touchAction: interactionMode ? 'none' : 'pan-y' }}>
         <div className="flex h-full w-full items-end justify-center pb-8 md:items-center md:pb-0">
-          <CarViewer zoom={zoom} rotationValue={rotationProgress} enableControls={interactionMode} />
+          <CarViewer zoom={zoom} rotationValue={rotationProgress} enableControls={isMobile ? interactionMode : true} />
         </div>
       </div>
     </div>
