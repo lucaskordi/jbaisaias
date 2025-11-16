@@ -38,9 +38,14 @@ export default function HomePage() {
     if (isMobile && scrollRef.current) {
       if (interactionMode) {
         scrollRef.current.style.overflow = 'hidden'
+        scrollRef.current.style.touchAction = 'none'
       } else {
         scrollRef.current.style.overflow = 'auto'
+        scrollRef.current.style.touchAction = 'auto'
       }
+    } else if (scrollRef.current) {
+      scrollRef.current.style.overflow = 'auto'
+      scrollRef.current.style.touchAction = 'auto'
     }
   }, [interactionMode, isMobile])
   const introOpacity = useTransform(scrollYProgress, [0, 0.2, 0.35], [1, 1, 0])
@@ -61,7 +66,7 @@ export default function HomePage() {
   const carRotationProgress = useTransform(scrollYProgress, [0.52, 0.7], [0, 1])
   const cityOpacity = useTransform(scrollYProgress, [0.45, 0.62, 0.8], [0, 0.6, 1])
   const adjustedZoom = useMemo(() => {
-    return isMobile ? zoom * 0.7 : zoom
+    return isMobile ? zoom * 0.55 : zoom
   }, [zoom, isMobile])
   const { increase, decrease } = useMemo(() => {
     return {
@@ -227,7 +232,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
           </span>
         </div>
       </motion.div>
-      <motion.div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-end px-6 md:hidden" style={{ opacity: introOpacity, paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
+      <motion.div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-end px-6 md:hidden" style={{ opacity: introOpacity, paddingBottom: 'calc(7rem + env(safe-area-inset-bottom))' }}>
         <div className="flex flex-col items-start gap-3 text-left text-xs font-semibold uppercase tracking-[0.32em] text-white/80 w-full max-w-sm">
           {prompts.map((prompt) => (
             <div key={prompt.lines.join('-')} className="flex items-start gap-3 w-full">
@@ -378,11 +383,11 @@ function MobileWarning({ onDismiss }: { onDismiss: () => void }) {
 
 function FooterMarquee() {
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[5] h-12 overflow-hidden">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[5] h-8 overflow-hidden md:h-12">
       <div className="absolute inset-0 z-0 bg-white shadow-[0_-10px_30px_rgba(0,0,0,0.15)]" />
       <div className="relative z-10 flex h-full items-center text-[#212121]">
         <motion.div
-          className="flex whitespace-nowrap text-xs font-semibold uppercase tracking-[0.6em]"
+          className="flex whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.6em] md:text-xs"
           animate={{ x: ['-50%', '0%'] }}
           transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
         >
