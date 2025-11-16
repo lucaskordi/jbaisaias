@@ -337,7 +337,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
           />
         </motion.div>
       </div>
-      <div className="pointer-events-auto relative z-[6] flex h-full w-full items-center justify-center md:items-center md:justify-center">
+      <div className={`relative z-[6] flex h-full w-full items-center justify-center md:items-center md:justify-center ${interactionMode ? 'pointer-events-auto' : 'pointer-events-none md:pointer-events-auto'}`} style={{ touchAction: interactionMode ? 'none' : 'pan-y' }}>
         <div className="flex h-full w-full items-end justify-center pb-8 md:items-center md:pb-0">
           <CarViewer zoom={zoom} rotationValue={rotationProgress} enableControls={interactionMode} />
         </div>

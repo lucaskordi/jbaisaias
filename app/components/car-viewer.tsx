@@ -31,7 +31,14 @@ export function CarViewer({ zoom, rotationValue, enableControls = true }: CarVie
 
   return (
     <div className="relative h-full w-full" style={{ pointerEvents: enableControls ? 'auto' : 'none', touchAction: enableControls ? 'none' : 'pan-y' }}>
-      <Canvas className="h-full w-full" camera={{ position: [4.2, 1.65, 4.2], fov: 40 }} dpr={[1, 1.8]} gl={{ preserveDrawingBuffer: true }} shadows>
+      <Canvas 
+        className="h-full w-full" 
+        camera={{ position: [4.2, 1.65, 4.2], fov: 40 }} 
+        dpr={[1, 1.8]} 
+        gl={{ preserveDrawingBuffer: true }} 
+        shadows
+        style={{ pointerEvents: enableControls ? 'auto' : 'none', touchAction: enableControls ? 'none' : 'pan-y' }}
+      >
         <CameraRig zoom={zoom} controls={controlsRef} />
         <SceneLights />
         <Suspense fallback={null}>
