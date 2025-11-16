@@ -13,7 +13,7 @@ export default function HomePage() {
   const [zoom, setZoom] = useState(DEFAULT_ZOOM)
   const [isMobile, setIsMobile] = useState(false)
   const [showMobileWarning, setShowMobileWarning] = useState(true)
-  const [interactionMode, setInteractionMode] = useState(false)
+  const [interactionMode, setInteractionMode] = useState(true)
   const scrollRef = useRef<HTMLElement | null>(null)
   const { scrollYProgress } = useScroll({
     container: scrollRef,
@@ -243,7 +243,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
           </span>
         </div>
       </motion.div>
-      <motion.div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-end px-6 md:hidden" style={{ opacity: introOpacity, paddingBottom: 'calc(9rem + env(safe-area-inset-bottom))' }}>
+      <motion.div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-end px-6 md:hidden" style={{ opacity: introOpacity, paddingBottom: 'calc(11rem + env(safe-area-inset-bottom))' }}>
         <div className="flex flex-col items-center gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-white/80">
           {mobilePrompts.map((prompt) => (
             <div key={prompt.lines.join('-')} className="flex items-center justify-center gap-3">
