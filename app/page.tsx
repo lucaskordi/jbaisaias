@@ -271,7 +271,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
           <span className="text-3xl leading-[0.9] text-[#00D848]">Carinho<span className="text-[#212121]">.</span></span>
         </div>
       </motion.div>
-      <motion.div className="pointer-events-none absolute inset-0 z-[5] hidden items-center justify-start px-16 md:flex" style={{ opacity: curitibaOpacity, x: curitibaX }}>
+      <motion.div className="pointer-events-none absolute inset-0 z-[7] hidden items-center justify-start px-16 md:flex" style={{ opacity: curitibaOpacity, x: curitibaX }}>
         <div className="max-w-lg text-left font-black tracking-[-0.05em] text-white flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <span className="text-7xl leading-[0.9] text-white">Para as Ruas</span>
@@ -281,7 +281,7 @@ function CarShowcase({ zoom, introOpacity, circleScale, messageOpacity, messageX
             href="https://drive.google.com/drive/folders/1Tl4Lbfdcuej_oZV4E4QQjQ1GHjlGyK6e?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
-            className="pointer-events-auto inline-flex items-center gap-2 justify-center rounded-full border-2 border-white bg-white/10 px-6 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white backdrop-blur transition hover:bg-white/20 w-fit"
+            className="pointer-events-auto relative z-10 inline-flex items-center gap-2 justify-center rounded-full border-2 border-white bg-white/10 px-6 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white backdrop-blur transition hover:bg-white/20 w-fit"
           >
             <motion.svg
               width="16"
